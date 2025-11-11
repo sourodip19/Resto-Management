@@ -8,7 +8,7 @@ import List from "./pages/List/List";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const App = () => {
-  const url = "https://resto-management-backend.onrender.com/";
+  const url = "https://resto-management-backend-a9yb.onrender.com/";
   return (
     <div>
       <ToastContainer />
