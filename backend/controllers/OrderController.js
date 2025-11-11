@@ -26,22 +26,22 @@ const placeOrder = async (req, res) => {
     await userModel.findByIdAndUpdate(req.body.userId, { cartData: {} });
 
     // ✅ Send WhatsApp message to user
-    await sendWhatsAppMessage(
-      req.body.address.phone,
-      `✅ Hi ${req.body.address.firstName}! Your order has been placed successfully 🍔
-Order ID: ${newOrder._id}
-We’ll notify you once it’s being prepared.`
-    );
+//     await sendWhatsAppMessage(
+//       req.body.address.phone,
+//       `✅ Hi ${req.body.address.firstName}! Your order has been placed successfully 🍔
+// Order ID: ${newOrder._id}
+// We’ll notify you once it’s being prepared.`
+//     );
 
     // ✅ Send WhatsApp message to admin (secure via .env)
-    await sendWhatsAppMessage(
-      process.env.ADMIN_WHATSAPP, // ✅ from .env
-      `🛒 New order received!
-👤 Customer: ${req.body.address.firstName} ${req.body.address.lastName}
-📞 Phone: ${req.body.address.phone}
-💰 Total: ₹${req.body.amount}
-🆔 Order ID: ${newOrder._id}`
-    );
+//     await sendWhatsAppMessage(
+//       process.env.ADMIN_WHATSAPP, // ✅ from .env
+//       `🛒 New order received!
+// 👤 Customer: ${req.body.address.firstName} ${req.body.address.lastName}
+// 📞 Phone: ${req.body.address.phone}
+// 💰 Total: ₹${req.body.amount}
+// 🆔 Order ID: ${newOrder._id}`
+//     );
 
     // Stripe checkout session
     const line_items = req.body.items.map((item) => ({
@@ -133,18 +133,18 @@ const updateStatus = async (req, res) => {
     const userPhone = order.address.phone;
 
     // ✅ Status-based WhatsApp notifications
-    const messages = {
-      "Food Processing":
-        "🍳 Your food is now being prepared! We’ll let you know when it’s ready.",
-      "Out for Delivery":
-        "🚚 Your order is out for delivery! It’ll reach you soon. 🍱",
-      Delivered:
-        "🎉 Your order has been delivered! Enjoy your meal 🍽️ and thank you for choosing us!",
-    };
+  //   const messages = {
+  //     "Food Processing":
+  //       "🍳 Your food is now being prepared! We’ll let you know when it’s ready.",
+  //     "Out for Delivery":
+  //       "🚚 Your order is out for delivery! It’ll reach you soon. 🍱",
+  //     Delivered:
+  //       "🎉 Your order has been delivered! Enjoy your meal 🍽️ and thank you for choosing us!",
+  //   };
 
-    if (messages[status]) {
-      await sendWhatsAppMessage(userPhone, messages[status]);
-    }
+  //   if (messages[status]) {
+  //     await sendWhatsAppMessage(userPhone, messages[status]);
+  //   }
 
     res.json({
       success: true,
@@ -156,7 +156,7 @@ const updateStatus = async (req, res) => {
       success: false,
       message: "Error while updating order status",
     });
-  }
+   }
 };
 
 export { placeOrder, verifyOrder, useOrders, listOrders, updateStatus };
