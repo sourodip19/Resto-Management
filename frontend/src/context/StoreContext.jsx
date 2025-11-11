@@ -8,7 +8,8 @@ const StoreContextProvider = (props) => {
   const [food_list, setFoodlist] = useState([]);
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(true); // 👈 added
-  const url = "https://resto-management-backend.onrender.com/";
+  const url = "https://resto-management-backend-a9yb.onrender.com/";
+  
 
   const fetchFoodList = async () => {
     const res = await axios.get(url + "/api/food/list");
