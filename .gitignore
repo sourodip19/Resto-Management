@@ -1,0 +1,27 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+.cache/
+coverage/
+uploads/
+temp/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Local auth/session data (for WhatsApp)
+backend/.wwebjs_auth/
+backend/.wwebjs_cache/
