@@ -8,7 +8,7 @@ const StoreContextProvider = (props) => {
   const [food_list, setFoodlist] = useState([]);
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(true); // 👈 added
-  const url = "http://localhost:4000";
+  const url = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
   const fetchFoodList = async () => {
     const res = await axios.get(url + "/api/food/list");
