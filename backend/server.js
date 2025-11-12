@@ -12,7 +12,14 @@ const port = process.env.PORT || 4000;
 
 // middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://resto-management-frontend.onrender.com",
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true,
+}));
+
 app.use("/images", express.static("uploads"));
 //  db connection
 connectDB();
