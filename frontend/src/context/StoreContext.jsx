@@ -8,7 +8,8 @@ const StoreContextProvider = (props) => {
   const [food_list, setFoodlist] = useState([]);
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(true); // 👈 added
-  const url = process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.PORT || 4000}`;
+  const url = import.meta.env.VITE_API_URL || "http://localhost:4000";
+
 
   
 
