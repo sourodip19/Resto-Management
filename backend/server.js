@@ -25,6 +25,10 @@ app.use("/images", express.static("uploads"));
 connectDB();
 
 // api endpoint
+app.get("/", (req, res) => {
+  res.send("✅ Backend is live and connected!");
+});
+
 app.use("/api/food", foodRouter);
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
