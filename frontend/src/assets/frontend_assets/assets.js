@@ -84,37 +84,62 @@ export const assets = {
 
 export const menu_list = [
     {
-        menu_name: "Salad",
+        menu_name: "Starters",
         menu_image: menu_1
     },
     {
-        menu_name: "Rolls",
-        menu_image: menu_2
+        menu_name: "Sandwiches",
+        menu_image: menu_8
     },
     {
-        menu_name: "Deserts",
-        menu_image: menu_3
-    },
-    {
-        menu_name: "Sandwich",
+        menu_name: "Pizza",
         menu_image: menu_4
     },
     {
-        menu_name: "Cake",
+        menu_name: "Pasta",
         menu_image: menu_5
     },
     {
-        menu_name: "Pure Veg",
+        menu_name: "Burger",
         menu_image: menu_6
     },
     {
-        menu_name: "Pasta",
+        menu_name: "Noodles",
+        menu_image: menu_6
+    },
+    {
+        menu_name: "Soups",
         menu_image: menu_7
     },
     {
-        menu_name: "Noodles",
+        menu_name: "Rice",
+        menu_image: menu_6
+    },
+    {
+        menu_name: "Breads",
+        menu_image: menu_6
+    },
+    {
+        menu_name: "Veg Main Course",
+        menu_image: menu_2
+    },
+    {
+        menu_name: "Non-Veg Main Course",
+        menu_image: menu_3
+    },
+    {
+        menu_name: "Beverages",
+        menu_image: menu_7
+    },
+    {
+        menu_name: "Desserts",
         menu_image: menu_8
-    }]
+    },
+    {
+        menu_name: "Extras",
+        menu_image: menu_8
+    }
+]
 
 export const food_list = [
     {

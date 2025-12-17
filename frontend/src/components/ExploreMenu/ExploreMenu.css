@@ -1,4 +1,6 @@
 .explore-menu {
+  width: 100%;                /* 🔥 FORCE FULL WIDTH */
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -10,63 +12,82 @@
   font-weight: 500;
 }
 
+/* ✅ TEXT — FULL WIDTH, 2 LINES */
 .explore-menu-text {
-  max-width: 60%;
-  color: #808080; /* ❌ was 'columns' instead of 'color' */
-  line-height: 1.6;
+  width: 100%;
+  max-width: 100%;            /* 🔥 IMPORTANT */
+  color: #808080;
+  line-height: 1.7;
+  font-size: 18px;
+  margin-bottom: 10px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;      /* 2 lines on desktop */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* ❌ You had '.explore-menu list' (invalid) → ✅ should be '.explore-menu-list' */
+/* GRID */
 .explore-menu-list {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
   gap: 30px;
   text-align: center;
-  margin: 20px 0px;
-  overflow-x: auto;
+  margin: 20px 0;
 }
 
-.explore-menu-list::-webkit-scrollbar {
-  display: none;
-}
-
+/* ITEM */
 .explore-menu-list-item img {
-  width: 7.5vw;
-  min-width: 80px;
+  width: 100%;
+  max-width: 100px;
+  margin: 0 auto;
   cursor: pointer;
   border-radius: 50%;
   transition: 0.2s ease;
 }
 
-
+.explore-menu-list-item img.active {
+  border: 4px solid tomato;
+  padding: 2px;
+}
 
 .explore-menu-list-item p {
   margin-top: 10px;
-  font-size: 16px;
+  font-size: max(1.4vw, 16px);
   color: #747474;
   font-weight: 500;
-  font-size: max(1.4vw, 16px);
   cursor: pointer;
 }
 
 .explore-menu hr {
-  margin: 10px 0px;
+  margin: 10px 0;
   height: 2px;
   background-color: #e2e2e2;
   border: none;
 }
 
-.explore-menu-list-item .active {
-  border: 4px solid tomato;
-  padding: 2px;
+/* RESPONSIVE */
+@media (max-width: 1050px) {
+  .explore-menu-text {
+    font-size: 14px;
+    -webkit-line-clamp: 3;
+  }
 }
 
+@media (max-width: 1200px) {
+  .explore-menu-list {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
 
-@media(max-width:1050px)
-{
-  .explore-menu-text{
-    max-width: 100%;
-    font-size:14px;
+@media (max-width: 768px) {
+  .explore-menu-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .explore-menu-list {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

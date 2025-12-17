@@ -19,7 +19,7 @@
     "mongoose": "^8.19.3",
     "multer": "^2.0.2",
     "nodemon": "^3.1.10",
-    "puppeteer": "^24.29.1",
+    "puppeteer": "^19.7.5",
     "qrcode-terminal": "^0.12.0",
     "stripe": "^19.3.0",
     "validator": "^13.15.22",
