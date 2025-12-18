@@ -159,7 +159,13 @@ const PlaceOrder = () => {
             <b>Total</b>
             <b>₹{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 20}</b>
           </div>
-          <button type="submit">PROCEED TO PAYMENT</button>
+          <button
+  type="button"
+  onClick={() => alert("Payment with RazorPay coming soon")}
+>
+  PROCEED TO PAYMENT
+</button>
+
         </div>
       </div>
     </form>

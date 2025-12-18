@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# root accidental files
+package.json
+package-lock.json
+node_modules
+.env
+
