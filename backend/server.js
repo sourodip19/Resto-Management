@@ -43,6 +43,7 @@ app.use(
     cors({
       origin: [
         process.env.FRONTEND_URL,
+        process.env.FRONTEND_ADMIN__URL,
         "http://localhost:5174"
       ],
       methods: ["GET", "POST", "PUT", "DELETE"],
