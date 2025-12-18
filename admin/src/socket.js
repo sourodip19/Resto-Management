@@ -1,14 +1,8 @@
 import { io } from "socket.io-client";
-import { socket } from "../socket";
 
-export const socket = io("http://localhost:4000", {
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
+
+export const socket = io(BACKEND_URL, {
   transports: ["websocket"],
+  autoConnect: true,
 });
-
-useEffect(() => {
-  socket.on("newOrder", (order) => {
-    setOrders((prev) => [order, ...prev]);
-  });
-
-  return () => socket.off("newOrder");
-}, []);

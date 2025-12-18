@@ -3,10 +3,7 @@ import axios from "axios";
 import "./Order.css";
 import { toast } from "react-toastify";
 import { assets } from "../../../../frontend/src/assets/frontend_assets/assets";
-import { io } from "socket.io-client";
-
-// 🔥 socket connection (outside component)
-const socket = io("http://localhost:4000");
+import { socket } from "../../socket"; // ✅ ONLY import
 
 const Order = ({ url }) => {
   const [orders, setOrders] = useState([]);
@@ -33,24 +30,22 @@ const Order = ({ url }) => {
     }
   };
 
-  // ✅ Initial load
+  // Initial load
   useEffect(() => {
     fetchAllOrders();
   }, []);
 
-  // ✅ LIVE SOCKET UPDATES
+  // 🔥 LIVE SOCKET UPDATES
   useEffect(() => {
-    // New order received
     socket.on("newOrder", (order) => {
       setOrders((prev) => [order, ...prev]);
       toast.success("🛒 New order received");
     });
 
-    // Order status updated
     socket.on("orderStatusUpdate", ({ orderId, status }) => {
       setOrders((prev) =>
-        prev.map((order) =>
-          order._id === orderId ? { ...order, status } : order
+        prev.map((o) =>
+          o._id === orderId ? { ...o, status } : o
         )
       );
     });
@@ -64,8 +59,8 @@ const Order = ({ url }) => {
   return (
     <div className="order add">
       <div className="order-list">
-        {orders.map((order, index) => (
-          <div key={index} className="order-item">
+        {orders.map((order) => (
+          <div key={order._id} className="order-item">
             <img src={assets.parcel_icon} alt="parcel" />
 
             <div className="order-item-details">
@@ -78,25 +73,15 @@ const Order = ({ url }) => {
               </p>
 
               <p className="order-item-amount">₹{order.amount}</p>
-              <p className="order-item-count">
-                Items: {order.items.length}
-              </p>
+              <p className="order-item-count">Items: {order.items.length}</p>
 
-              <p
-                className={`order-item-status ${
-                  order.status === "Delivered"
-                    ? "status-delivered"
-                    : order.status === "Out for Delivery"
-                    ? "status-out"
-                    : "status-processing"
-                }`}
-              >
+              <p className={`order-item-status`}>
                 ● {order.status}
               </p>
 
               <select
-                onChange={(e) => statusHandler(e, order._id)}
                 value={order.status}
+                onChange={(e) => statusHandler(e, order._id)}
               >
                 <option value="Food Processing">Food Processing</option>
                 <option value="Out for Delivery">Out for Delivery</option>
