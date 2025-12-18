@@ -1,67 +1,83 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import http from "http";
+import { Server } from "socket.io";
+
 import { connectDB } from "./config/db.js";
 import foodRouter from "./routes/foodRoute.js";
 import orderRouter from "./routes/OrderRoute.js";
 import cartRouter from "./routes/CartRoute.js";
 import userRouter from "./routes/UserRoute.js";
-import { Server } from "socket.io";
-import http from "http";
 
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Create HTTP server
-const server = http.createServer(app);
+// ----------------------
+// Allowed origins
+// ----------------------
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.FRONTEND_ADMIN_URL,
+  "http://localhost:5173",
+  "http://localhost:5174",
+];
 
-// Socket.IO
-export const io = new Server(server, {
-    cors: {
-      origin: [
-        process.env.FRONTEND_URL,
-        process.env.FRONTEND_ADMIN__URL,
-        "http://localhost:5174"
-      ],
-      methods: ["GET", "POST"],
-    },
-  });
-  
-
-// Socket events
-io.on("connection", (socket) => {
-  console.log("🟢 Admin/User connected:", socket.id);
-
-  socket.on("disconnect", () => {
-    console.log("🔴 Disconnected:", socket.id);
-  });
-});
-
+// ----------------------
 // Middleware
+// ----------------------
 app.use(express.json());
+
 app.use(
-    cors({
-      origin: [
-        process.env.FRONTEND_URL,
-        process.env.FRONTEND_ADMIN__URL,
-        "http://localhost:5174"
-      ],
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      credentials: true
-    })
-  );
-  
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS not allowed"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
+
 app.use("/images", express.static("uploads"));
 
+// ----------------------
 // DB
+// ----------------------
 connectDB();
 
+// ----------------------
 // Routes
+// ----------------------
 app.use("/api/food", foodRouter);
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 
+// ----------------------
+// HTTP + Socket.IO
+// ----------------------
+const server = http.createServer(app);
+
+export const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("🟢 Socket connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("🔴 Socket disconnected:", socket.id);
+  });
+});
+
+// ----------------------
 server.listen(port, () =>
   console.log("🚀 Server running on port", port)
 );
