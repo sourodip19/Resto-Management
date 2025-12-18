@@ -18,7 +18,7 @@ const App = () => {
       <div className="app-content">
         <Sidebar />
         <Routes>
-          <Route path="/" element={<Navigate to="/list" replace />} />
+          <Route path="/" element={<List url={url} />}  />
           <Route path="/add" element={<Add url={url} />} />
           <Route path="/list" element={<List url={url} />} />
           <Route path="/order" element={<Order url={url} />} />
