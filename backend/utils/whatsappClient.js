@@ -1,67 +1,66 @@
-import pkg from "whatsapp-web.js";
-const { Client, LocalAuth } = pkg;
-import qrcode from "qrcode-terminal";
+import "dotenv/config";
 
-const client = new Client({
-  authStrategy: new LocalAuth({
-    clientId: "resto-admin", // stable session
-  }),
-  puppeteer: {
-    headless: false, // 🔥 REQUIRED
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  },
-});
-const normalizeNumber = (number) => {
-  return number
-    .toString()
-    .replace(/\D/g, "")      // remove non-digits
-    .replace(/^0+/, "")      // remove leading zeros
-    .startsWith("91")
-      ? number
-      : `91${number}`;
+let client = null;
+let sendWhatsAppMessage = async () => {
+  console.log("📵 WhatsApp disabled in production");
 };
 
-// QR
-client.on("qr", (qr) => {
-  console.log("\n📱 Scan this QR in WhatsApp:");
-  qrcode.generate(qr, { small: true });
-});
+/* ===============================
+   ONLY RUN WHATSAPP LOCALLY
+================================ */
+if (process.env.NODE_ENV !== "production") {
+  const pkg = await import("whatsapp-web.js");
+  const qrcode = (await import("qrcode-terminal")).default;
 
-// Ready
-client.on("ready", () => {
-  console.log("✅ WhatsApp client is READY");
-});
+  const { Client, LocalAuth } = pkg;
 
-// Auth success
-client.on("authenticated", () => {
-  console.log("🔐 WhatsApp authenticated");
-});
+  const normalizeNumber = (number) => {
+    const cleaned = number.toString().replace(/\D/g, "").replace(/^0+/, "");
+    return cleaned.startsWith("91") ? cleaned : `91${cleaned}`;
+  };
 
-// Auth failure
-client.on("auth_failure", (msg) => {
-  console.error("❌ Auth failure:", msg);
-});
+  client = new Client({
+    authStrategy: new LocalAuth({ clientId: "resto-admin" }),
+    puppeteer: {
+      headless: false,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    },
+  });
 
-// Disconnect
-client.on("disconnected", (reason) => {
-  console.error("⚠️ WhatsApp disconnected:", reason);
-});
+  client.on("qr", (qr) => {
+    console.log("\n📱 Scan this QR in WhatsApp:");
+    qrcode.generate(qr, { small: true });
+  });
 
-// Init
-client.initialize();
+  client.on("ready", () => {
+    console.log("✅ WhatsApp client READY");
+  });
 
-// Send message util
+  client.on("authenticated", () => {
+    console.log("🔐 WhatsApp authenticated");
+  });
 
-export const sendWhatsAppMessage = async (number, message) => {
-  try {
-    const formatted = normalizeNumber(number);
-    const chatId = `${formatted}@c.us`;
-    await client.sendMessage(chatId, message);
-    console.log(`📤 WhatsApp sent → ${formatted}`);
-  } catch (err) {
-    console.error("❌ WhatsApp send failed:", err.message);
-  }
-};
+  client.on("auth_failure", (msg) => {
+    console.error("❌ Auth failure:", msg);
+  });
 
+  client.on("disconnected", (reason) => {
+    console.error("⚠️ WhatsApp disconnected:", reason);
+  });
 
+  client.initialize();
+
+  sendWhatsAppMessage = async (number, message) => {
+    try {
+      const formatted = normalizeNumber(number);
+      const chatId = `${formatted}@c.us`;
+      await client.sendMessage(chatId, message);
+      console.log(`📤 WhatsApp sent → ${formatted}`);
+    } catch (err) {
+      console.error("❌ WhatsApp send failed:", err.message);
+    }
+  };
+}
+
+export { sendWhatsAppMessage };
 export default client;

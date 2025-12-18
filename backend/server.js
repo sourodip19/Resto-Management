@@ -17,10 +17,15 @@ const server = http.createServer(app);
 
 // Socket.IO
 export const io = new Server(server, {
-  cors: {
-    origin: "*",
-  },
-});
+    cors: {
+      origin: [
+        process.env.FRONTEND_URL,
+        "http://localhost:5174"
+      ],
+      methods: ["GET", "POST"],
+    },
+  });
+  
 
 // Socket events
 io.on("connection", (socket) => {
@@ -33,7 +38,17 @@ io.on("connection", (socket) => {
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(
+    cors({
+      origin: [
+        process.env.FRONTEND_URL,
+        "http://localhost:5174"
+      ],
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      credentials: true
+    })
+  );
+  
 app.use("/images", express.static("uploads"));
 
 // DB

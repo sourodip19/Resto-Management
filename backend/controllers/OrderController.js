@@ -5,7 +5,11 @@ import { sendWhatsAppMessage } from "../utils/whatsappClient.js";
 import { io } from "../server.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const frontend_url = "http://localhost:5174";
+const frontend_url =
+  process.env.NODE_ENV === "production"
+    ? process.env.FRONTEND_URL
+    : "http://localhost:5174";
+
 
 /* =========================
    1️⃣ PLACE ORDER (INIT)
