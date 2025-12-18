@@ -7,8 +7,11 @@ import { useEffect } from "react";
 import hideIcon from "../../assets/hide.png";
 import unhideIcon from "../../assets/unhide.png";
 import deleteIcon from "../../assets/delete.png";
+import editIcon from "../../assets/edit.png";
+import { useNavigate } from "react-router-dom";
 const List = ({url}) => {
   const [list, setList] = useState([]);
+  const navigate = useNavigate();
   const fetchList = async () => {
     const response = await axios.get(`${url}/api/food/list`);
     console.log(response.data);
@@ -88,6 +91,12 @@ const List = ({url}) => {
                   alt="delete"
                   title="Delete Item"
                   onClick={() => deleteItem(item._id)}
+                />
+                <img
+                  src={editIcon}
+                  alt="edit"
+                  title="Edit Item"
+                  onClick={() => navigate(`/admin/edit/${item._id}`)}
                 />
               </div>
             </div>

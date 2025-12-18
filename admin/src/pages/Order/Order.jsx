@@ -2,16 +2,23 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Order.css";
 import { toast } from "react-toastify";
-import { keyBy } from "lodash";
 import { assets } from "../../../../frontend/src/assets/frontend_assets/assets";
+import { io } from "socket.io-client";
+
+// 🔥 socket connection (outside component)
+const socket = io("http://localhost:4000");
+
 const Order = ({ url }) => {
   const [orders, setOrders] = useState([]);
+
   const fetchAllOrders = async () => {
-    const res = await axios.get(url + "/api/order/list");
-    if (res.data) {
-      setOrders(res.data.data);
-    } else {
-      toast.error("Error");
+    try {
+      const res = await axios.get(url + "/api/order/list");
+      if (res.data.success) {
+        setOrders(res.data.data);
+      }
+    } catch {
+      toast.error("Failed to fetch orders");
     }
   };
 
@@ -20,13 +27,38 @@ const Order = ({ url }) => {
       orderId,
       status: e.target.value,
     });
-    if (res.data.success) {
-      await fetchAllOrders();
+
+    if (!res.data.success) {
+      toast.error("Failed to update status");
     }
   };
 
+  // ✅ Initial load
   useEffect(() => {
     fetchAllOrders();
+  }, []);
+
+  // ✅ LIVE SOCKET UPDATES
+  useEffect(() => {
+    // New order received
+    socket.on("newOrder", (order) => {
+      setOrders((prev) => [order, ...prev]);
+      toast.success("🛒 New order received");
+    });
+
+    // Order status updated
+    socket.on("orderStatusUpdate", ({ orderId, status }) => {
+      setOrders((prev) =>
+        prev.map((order) =>
+          order._id === orderId ? { ...order, status } : order
+        )
+      );
+    });
+
+    return () => {
+      socket.off("newOrder");
+      socket.off("orderStatusUpdate");
+    };
   }, []);
 
   return (
@@ -45,8 +77,10 @@ const Order = ({ url }) => {
                 )}
               </p>
 
-              <p className="order-item-amount">${order.amount}</p>
-              <p className="order-item-count">Items: {order.items.length}</p>
+              <p className="order-item-amount">₹{order.amount}</p>
+              <p className="order-item-count">
+                Items: {order.items.length}
+              </p>
 
               <p
                 className={`order-item-status ${
@@ -59,8 +93,6 @@ const Order = ({ url }) => {
               >
                 ● {order.status}
               </p>
-
-              <button className="track-btn">Track Order</button>
 
               <select
                 onChange={(e) => statusHandler(e, order._id)}
@@ -77,4 +109,5 @@ const Order = ({ url }) => {
     </div>
   );
 };
+
 export default Order;

@@ -1,55 +1,67 @@
 import pkg from "whatsapp-web.js";
 const { Client, LocalAuth } = pkg;
-
 import qrcode from "qrcode-terminal";
 
-// Initialize client
 const client = new Client({
-  authStrategy: new LocalAuth(),
+  authStrategy: new LocalAuth({
+    clientId: "resto-admin", // stable session
+  }),
   puppeteer: {
-    headless: true,
+    headless: false, // 🔥 REQUIRED
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   },
 });
+const normalizeNumber = (number) => {
+  return number
+    .toString()
+    .replace(/\D/g, "")      // remove non-digits
+    .replace(/^0+/, "")      // remove leading zeros
+    .startsWith("91")
+      ? number
+      : `91${number}`;
+};
 
-// Display QR code for first-time authentication
+// QR
 client.on("qr", (qr) => {
-  console.log("\n📱 Scan this QR to connect WhatsApp:");
-  console.log("═══════════════════════════════════");
+  console.log("\n📱 Scan this QR in WhatsApp:");
   qrcode.generate(qr, { small: true });
-  console.log("═══════════════════════════════════");
 });
 
-// When WhatsApp is ready
-client.on("ready", () => console.log("✅ WhatsApp client is ready!"));
+// Ready
+client.on("ready", () => {
+  console.log("✅ WhatsApp client is READY");
+});
 
-// Handle re-auth / session issues
-client.on("authenticated", () => console.log("🔐 WhatsApp authenticated!"));
-client.on("auth_failure", (msg) =>
-  console.error("❌ Authentication failed:", msg)
-);
+// Auth success
+client.on("authenticated", () => {
+  console.log("🔐 WhatsApp authenticated");
+});
+
+// Auth failure
+client.on("auth_failure", (msg) => {
+  console.error("❌ Auth failure:", msg);
+});
+
+// Disconnect
 client.on("disconnected", (reason) => {
   console.error("⚠️ WhatsApp disconnected:", reason);
-  console.log("🔄 Reconnecting...");
-  client.initialize();
 });
 
-// Start WhatsApp session
+// Init
 client.initialize();
 
-// ✅ Utility function to send messages
+// Send message util
+
 export const sendWhatsAppMessage = async (number, message) => {
   try {
-    // Ensure number is in correct format (no +, just 91XXXXXXXXXX)
-    const formatted = `${number}@c.us`;
-    await client.sendMessage(formatted, message);
-    console.log(`📤 WhatsApp message sent to ${number}`);
+    const formatted = normalizeNumber(number);
+    const chatId = `${formatted}@c.us`;
+    await client.sendMessage(chatId, message);
+    console.log(`📤 WhatsApp sent → ${formatted}`);
   } catch (err) {
-    console.error(
-      `❌ Failed to send WhatsApp message to ${number}:`,
-      err.message
-    );
+    console.error("❌ WhatsApp send failed:", err.message);
   }
 };
+
 
 export default client;

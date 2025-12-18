@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { connectDB } from "./config/db.js";
@@ -5,22 +6,45 @@ import foodRouter from "./routes/foodRoute.js";
 import orderRouter from "./routes/OrderRoute.js";
 import cartRouter from "./routes/CartRoute.js";
 import userRouter from "./routes/UserRoute.js";
-import "dotenv/config";
-// app config
+import { Server } from "socket.io";
+import http from "http";
+
 const app = express();
 const port = process.env.PORT || 4000;
 
-// middleware
+// Create HTTP server
+const server = http.createServer(app);
+
+// Socket.IO
+export const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+
+// Socket events
+io.on("connection", (socket) => {
+  console.log("🟢 Admin/User connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("🔴 Disconnected:", socket.id);
+  });
+});
+
+// Middleware
 app.use(express.json());
 app.use(cors());
 app.use("/images", express.static("uploads"));
-//  db connection
+
+// DB
 connectDB();
 
-// api endpoint
+// Routes
 app.use("/api/food", foodRouter);
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 
-app.listen(port, () => console.log("Server is running at port ", port));
+server.listen(port, () =>
+  console.log("🚀 Server running on port", port)
+);

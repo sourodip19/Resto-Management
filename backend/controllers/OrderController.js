@@ -2,102 +2,164 @@ import orderModel from "../models/orderModel.js";
 import userModel from "../models/UserModel.js";
 import Stripe from "stripe";
 import { sendWhatsAppMessage } from "../utils/whatsappClient.js";
-import dotenv from "dotenv";
-
-dotenv.config();
+import { io } from "../server.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const frontend_url = "http://localhost:5174";
 
-// 📦 Place Order (frontend)
+/* =========================
+   1️⃣ PLACE ORDER (INIT)
+========================= */
 const placeOrder = async (req, res) => {
-  const frontend_url = "http://localhost:5174";
-
   try {
-    // Create order
-    const newOrder = new orderModel({
+    const order = new orderModel({
       userId: req.body.userId,
       items: req.body.items,
       amount: req.body.amount,
       address: req.body.address,
+      payment: false,
+      status: "Pending",
     });
-    await newOrder.save();
 
-    // Clear cart
-    await userModel.findByIdAndUpdate(req.body.userId, { cartData: {} });
+    await order.save();
 
-    // ✅ Send WhatsApp message to user
-    await sendWhatsAppMessage(
-      req.body.address.phone,
-      `✅ Hi ${req.body.address.firstName}! Your order has been placed successfully 🍔
-Order ID: ${newOrder._id}
-We’ll notify you once it’s being prepared.`
-    );
-
-    // ✅ Send WhatsApp message to admin (secure via .env)
-    await sendWhatsAppMessage(
-      process.env.ADMIN_WHATSAPP, // ✅ from .env
-      `🛒 New order received!
-👤 Customer: ${req.body.address.firstName} ${req.body.address.lastName}
-📞 Phone: ${req.body.address.phone}
-💰 Total: ₹${req.body.amount}
-🆔 Order ID: ${newOrder._id}`
-    );
-
-    // Stripe checkout session
     const line_items = req.body.items.map((item) => ({
       price_data: {
         currency: "inr",
-        product_data: {
-          name: item.name,
-        },
-        unit_amount: item.price * 100, // ✅ RUPEES → PAISE
+        product_data: { name: item.name },
+        unit_amount: item.price * 100,
       },
       quantity: item.quantity,
     }));
-    
-    // ✅ FIXED delivery charge (example: ₹40)
+
     line_items.push({
       price_data: {
         currency: "inr",
         product_data: { name: "Delivery Charges" },
-        unit_amount: 20 * 100, // ₹40
+        unit_amount: 20 * 100,
       },
       quantity: 1,
     });
-    
+
     const session = await stripe.checkout.sessions.create({
-      line_items,
       mode: "payment",
-      success_url: `${frontend_url}/verify?success=true&orderId=${newOrder._id}`,
-      cancel_url: `${frontend_url}/verify?success=false&orderId=${newOrder._id}`,
+      line_items,
+      success_url: `${frontend_url}/verify?success=true&orderId=${order._id}`,
+      cancel_url: `${frontend_url}/verify?success=false&orderId=${order._id}`,
     });
 
     res.json({ success: true, session_url: session.url });
-  } catch (error) {
-    console.error("❌ Error in placeOrder:", error);
-    res.json({
-      success: false,
-      message: "Error in OrderController → placeOrder",
-    });
+  } catch (err) {
+    res.status(500).json({ success: false });
   }
 };
 
-// 💳 Verify Payment
+/* =========================
+   2️⃣ VERIFY PAYMENT
+========================= */
 const verifyOrder = async (req, res) => {
   const { orderId, success } = req.body;
+
   try {
-    if (success === "true") {
-      await orderModel.findByIdAndUpdate(orderId, { payment: true });
-      res.json({ success: true, message: "Payment successful" });
-    } else {
-      await orderModel.findByIdAndDelete(orderId);
-      res.json({ success: false, message: "Payment failed" });
+    const order = await orderModel.findById(orderId);
+    const userMessage = `
+✅ *Order Confirmed!*
+
+🍔 *Items:*
+${order.items.map(i => `• ${i.name} × ${i.quantity}`).join("\n")}
+
+💰 *Paid:* ₹${order.amount}
+⏱️ *Estimated time:* 30 minutes
+
+📞 *Restaurant:* ${process.env.OWNER_PHONE}
+
+🆔 *Order ID:* ${order._id}
+
+Thank you for ordering with us! 🙏
+`;
+
+const ownerMessage = `
+🛒 *NEW ORDER RECEIVED*
+
+👤 *Customer:* ${order.address.firstName} ${order.address.lastName}
+📞 *Phone:* ${order.address.phone}
+🏠 *Address:* ${order.address.street}, ${order.address.city}
+
+🍔 *Items:*
+${order.items.map(i => `• ${i.name} × ${i.quantity}`).join("\n")}
+
+💰 *Amount:* ₹${order.amount}
+🆔 *Order ID:* ${order._id}
+`;
+
+    
+    if (!order) return res.json({ success: false });
+
+    // Prevent duplicate execution
+    if (order.payment === true) {
+      return res.json({ success: true, message: "Already verified" });
     }
-  } catch (error) {
-    console.error("❌ Error in verifyOrder:", error);
-    res.json({ success: false, message: "Error verifying order" });
+
+    if (success === "true") {
+      order.payment = true;
+      order.status = "Food Processing";
+      await order.save();
+
+      await userModel.findByIdAndUpdate(order.userId, { cartData: {} });
+
+      await sendWhatsAppMessage(order.address.phone, userMessage);
+      await sendWhatsAppMessage(process.env.ADMIN_WHATSAPP, ownerMessage);
+      
+
+      // 🔥 Live update to admin
+      io.emit("newOrder", order);
+
+      return res.json({ success: true });
+    }
+
+    await orderModel.findByIdAndDelete(orderId);
+    res.json({ success: false });
+  } catch (err) {
+    res.status(500).json({ success: false });
   }
 };
+
+/* =========================
+   3️⃣ UPDATE STATUS (ADMIN)
+========================= */
+const updateStatus = async (req, res) => {
+  const { orderId, status } = req.body;
+
+  try {
+    const order = await orderModel.findById(orderId);
+    if (!order || !order.payment)
+      return res.json({ success: false });
+
+    order.status = status;
+    await order.save();
+
+    const messages = {
+      "Food Processing": "🍳 Preparing your food",
+      "Out for Delivery": "🚚 Out for delivery",
+      Delivered: "🎉 Delivered!",
+    };
+
+    if (messages[status]) {
+      await sendWhatsAppMessage(order.address.phone, messages[status]);
+    }
+
+    // 🔥 Live update to user & admin
+    io.emit("orderStatusUpdate", {
+      orderId,
+      status,
+    });
+
+    res.json({ success: true });
+  } catch {
+    res.json({ success: false });
+  }
+};
+
 
 // 👤 Fetch user orders (frontend)
 const useOrders = async (req, res) => {
@@ -111,55 +173,23 @@ const useOrders = async (req, res) => {
 };
 
 // 🧾 Fetch all orders (admin)
+// ONLY show paid orders to admin
 const listOrders = async (req, res) => {
   try {
-    const orders = await orderModel.find({});
+    const orders = await orderModel
+      .find({ payment: true })   // ✅ IMPORTANT
+      .sort({ createdAt: -1 });
+
     res.json({ success: true, data: orders });
-  } catch (error) {
-    console.error("❌ Error in listOrders:", error);
-    res.json({ success: false, message: "Error fetching admin orders" });
+  } catch (err) {
+    res.json({ success: false });
   }
 };
 
-// 🚚 Update order status + send WhatsApp notifications
-const updateStatus = async (req, res) => {
-  try {
-    const { orderId, status } = req.body;
-    const order = await orderModel.findById(orderId);
-
-    if (!order) {
-      return res.json({ success: false, message: "Order not found" });
-    }
-
-    await orderModel.findByIdAndUpdate(orderId, { status });
-
-    const userPhone = order.address.phone;
-
-    // ✅ Status-based WhatsApp notifications
-    const messages = {
-      "Food Processing":
-        "🍳 Your food is now being prepared! We’ll let you know when it’s ready.",
-      "Out for Delivery":
-        "🚚 Your order is out for delivery! It’ll reach you soon. 🍱",
-      Delivered:
-        "🎉 Your order has been delivered! Enjoy your meal 🍽️ and thank you for choosing us!",
-    };
-
-    if (messages[status]) {
-      await sendWhatsAppMessage(userPhone, messages[status]);
-    }
-
-    res.json({
-      success: true,
-      message: "Status updated and WhatsApp notification sent.",
-    });
-  } catch (error) {
-    console.error("❌ Error in updateStatus:", error);
-    res.json({
-      success: false,
-      message: "Error while updating order status",
-    });
-  }
+export {
+  placeOrder,
+  verifyOrder,
+  updateStatus,
+  useOrders, 
+  listOrders,
 };
-
-export { placeOrder, verifyOrder, useOrders, listOrders, updateStatus };

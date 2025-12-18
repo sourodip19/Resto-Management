@@ -27,7 +27,7 @@
   color: white;
   font-size: 1vw;
 }
-.header-contents button {
+.header-contents a {
   border: none;
   color: #747474;
   font-weight: 500;
