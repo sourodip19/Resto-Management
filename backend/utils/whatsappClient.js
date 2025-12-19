@@ -12,7 +12,7 @@ if (process.env.NODE_ENV !== "production") {
   const pkg = await import("whatsapp-web.js");
   const qrcode = (await import("qrcode-terminal")).default;
 
-  const { Client, LocalAuth } = pkg;
+  const { Client, LocalAuth } = pkg.default;
 
   const normalizeNumber = (number) => {
     const cleaned = number.toString().replace(/\D/g, "").replace(/^0+/, "");

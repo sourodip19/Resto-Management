@@ -5,11 +5,13 @@ import { sendWhatsAppMessage } from "../utils/whatsappClient.js";
 import { io } from "../server.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const frontend_url =
+const frontend_url = 
   process.env.NODE_ENV === "production"
     ? process.env.FRONTEND_URL
     : "http://localhost:5174";
-
+    console.log("NODE_ENV:", process.env.NODE_ENV);
+    console.log("Frontend URL chosen:", frontend_url);
+    
 
 /* =========================
    1️⃣ PLACE ORDER (INIT)
@@ -44,7 +46,7 @@ const placeOrder = async (req, res) => {
       },
       quantity: 1,
     });
-
+    
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items,

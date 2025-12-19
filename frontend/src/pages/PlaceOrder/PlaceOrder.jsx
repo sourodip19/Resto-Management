@@ -6,8 +6,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const PlaceOrder = () => {
   const { getTotalCartAmount, token, food_list, cartItems, url } =
-    useContext(StoreContext);
-
+  useContext(StoreContext);
+  
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -41,7 +41,7 @@ const PlaceOrder = () => {
       items: orderItems,
       amount: getTotalCartAmount() + 20,
     };
-    let res = await axios.post(url + "/api/order/place", orderData, {
+    let res = await axios.post(url + "/api/order/place", orderData,  {     
       headers: { token },
     });
     if (res.data.success) {
@@ -159,12 +159,21 @@ const PlaceOrder = () => {
             <b>Total</b>
             <b>₹{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 20}</b>
           </div>
+          {import.meta.env.MODE==='production'? (
           <button
-  type="button"
-  onClick={() => alert("Payment with RazorPay coming soon")}
->
-  PROCEED TO PAYMENT
-</button>
+          type="button"
+          onClick={() => alert("Payment with RazorPay coming soon")}
+          >
+          PROCEED TO PAYMENT
+          </button>
+          )
+          :
+          (
+            <button type="submit">
+            PROCEED TO PAYMENT
+            </button>
+          )
+        }
 
         </div>
       </div>

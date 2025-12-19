@@ -9,6 +9,7 @@ import foodRouter from "./routes/foodRoute.js";
 import orderRouter from "./routes/OrderRoute.js";
 import cartRouter from "./routes/CartRoute.js";
 import userRouter from "./routes/UserRoute.js";
+import foodModel from "./models/FoodModel.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -19,8 +20,8 @@ const port = process.env.PORT || 4000;
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   process.env.FRONTEND_ADMIN_URL,
-  "http://localhost:5173",
   "http://localhost:5174",
+  "http://localhost:5175",
 ];
 
 // ----------------------
@@ -56,7 +57,16 @@ app.use("/api/food", foodRouter);
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
-
+app.get("/api/food/search", async (req, res) => {
+    const q = req.query.q;
+  
+    const results = await foodModel.find({
+      name: { $regex: q, $options: "i" }
+    });
+  
+    res.json(results);
+  });
+  
 // ----------------------
 // HTTP + Socket.IO
 // ----------------------

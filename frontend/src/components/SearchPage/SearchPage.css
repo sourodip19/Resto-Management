@@ -1,0 +1,20 @@
+.navbar-search {
+    position: relative;
+  }
+  
+  .search-input {
+    position: absolute;
+    top: 0;
+    left: 30px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    width: 150px;
+    transition: width 0.3s ease;
+  }
+  
+  .search-icon {
+    cursor: pointer;
+  }
+  
