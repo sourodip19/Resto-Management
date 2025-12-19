@@ -24,7 +24,25 @@ const Navbar = ({ setShowLogin }) => {
       setSearchTerm("");
     }
   };
-
+  const scrollToSection = (id) => {
+    const section = document.getElementById(id);
+  
+    if (section) {
+      // Section exists on current page → just scroll
+      section.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // Section not present → go home then scroll
+      navigate("/");
+  
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({
+          behavior: "smooth",
+        });
+      }, 150);
+    }
+  };
+  
+  
   return (
     <div className="navbar">
       <Link to="/">
@@ -35,13 +53,13 @@ const Navbar = ({ setShowLogin }) => {
         <Link to="/" onClick={() => setMenu("Home")} className={menu === "Home" ? "active" : ""}>
           Home
         </Link>
-        <li onClick={() => setMenu("Menu")} className={menu === "Menu" ? "active" : ""}>
+        <li onClick={() => {setMenu("Menu"), scrollToSection("explore-menu");}} className={menu === "Menu" ? "active" : ""}>
           Menu
         </li>
-        <li onClick={() => setMenu("Mobile-App")} className={menu === "Mobile-App" ? "active" : ""}>
+        <li onClick={() => {setMenu("Mobile-App"), scrollToSection("app-download");}} className={menu === "Mobile-App" ? "active" : ""}>
           Mobile-App
         </li>
-        <li onClick={() => setMenu("Contact Us")} className={menu === "Contact Us" ? "active" : ""}>
+        <li onClick={() => {setMenu("Contact Us"), scrollToSection("footer");}} className={menu === "Contact Us" ? "active" : ""}>
           Contact Us
         </li>
       </ul>
