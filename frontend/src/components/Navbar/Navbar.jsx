@@ -8,7 +8,8 @@ const Navbar = ({ setShowLogin }) => {
   const [menu, setMenu] = useState("Home");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { getTotalCartAmount, token, setToken } = useContext(StoreContext);
+  const { getTotalCartAmount, getTotalCartItems, token, setToken } = useContext(StoreContext);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -86,7 +87,12 @@ const Navbar = ({ setShowLogin }) => {
           <Link to="/cart">
             <img src={assets.basket_icon} alt="" />
           </Link>
-          <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
+          {getTotalCartItems() > 0 && (
+  <div className="cart-count">
+    {getTotalCartItems()}
+  </div>
+)}
+
         </div>
 
         {!token ? (

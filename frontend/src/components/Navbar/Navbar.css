@@ -53,6 +53,21 @@
 .navbar-search-icon {
   position: relative;
 }
+.cart-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: tomato;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .navbar-search-icon .dot {
   position: absolute;
