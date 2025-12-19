@@ -108,3 +108,25 @@
 .nav-profile-dropdown li:hover {
   color: tomato;
 }
+
+.navbar-search {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  padding: 6px 10px;
+  border-radius: 30px;
+  gap: 8px;
+}
+
+.navbar-search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 140px;
+  font-size: 14px;
+}
+
+.navbar-search img {
+  width: 18px;
+  height: 18px;
+}

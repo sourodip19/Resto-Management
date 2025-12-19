@@ -6,6 +6,8 @@ import { StoreContext } from "../../context/StoreContext";
 
 const Navbar = ({ setShowLogin }) => {
   const [menu, setMenu] = useState("Home");
+  const [searchTerm, setSearchTerm] = useState("");
+
   const { getTotalCartAmount, token, setToken } = useContext(StoreContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,38 +18,11 @@ const Navbar = ({ setShowLogin }) => {
     navigate("/");
   };
 
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+      setSearchTerm("");
     }
-  };
-
-  const handleMenuClick = () => {
-    setMenu("Menu");
-
-    if (location.pathname !== "/") {
-      navigate("/");
-      setTimeout(() => scrollToSection("explore-menu"), 300);
-    } else {
-      scrollToSection("explore-menu");
-    }
-  };
-
-  const handleAppClick = () => {
-    setMenu("Mobile-App");
-
-    if (location.pathname !== "/") {
-      navigate("/");
-      setTimeout(() => scrollToSection("app-download"), 300);
-    } else {
-      scrollToSection("app-download");
-    }
-  };
-
-  const handleContactClick = () => {
-    setMenu("Contact Us");
-    scrollToSection("footer");
   };
 
   return (
@@ -57,38 +32,37 @@ const Navbar = ({ setShowLogin }) => {
       </Link>
 
       <ul className="navbar-menu">
-        <Link
-          to="/"
-          onClick={() => setMenu("Home")}
-          className={menu === "Home" ? "active" : ""}
-        >
+        <Link to="/" onClick={() => setMenu("Home")} className={menu === "Home" ? "active" : ""}>
           Home
         </Link>
-
-        <li
-          onClick={handleMenuClick}
-          className={menu === "Menu" ? "active" : ""}
-        >
+        <li onClick={() => setMenu("Menu")} className={menu === "Menu" ? "active" : ""}>
           Menu
         </li>
-
-        <li
-          onClick={handleAppClick}
-          className={menu === "Mobile-App" ? "active" : ""}
-        >
+        <li onClick={() => setMenu("Mobile-App")} className={menu === "Mobile-App" ? "active" : ""}>
           Mobile-App
         </li>
-
-        <li
-          onClick={handleContactClick}
-          className={menu === "Contact Us" ? "active" : ""}
-        >
+        <li onClick={() => setMenu("Contact Us")} className={menu === "Contact Us" ? "active" : ""}>
           Contact Us
         </li>
       </ul>
 
       <div className="navbar-right">
-        <img src={assets.search_icon} alt="" />
+        {/* 🔍 Search box */}
+        <div className="navbar-search">
+          <input
+            type="text"
+            placeholder="Search food..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+          />
+          <img
+            src={assets.search_icon}
+            alt="search"
+            onClick={handleSearch}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
 
         <div className="navbar-search-icon">
           <Link to="/cart">
@@ -101,15 +75,15 @@ const Navbar = ({ setShowLogin }) => {
           <button onClick={() => setShowLogin(true)}>Sign In</button>
         ) : (
           <div className="navbar-profile">
-            <img src={assets.profile_icon} />
+            <img src={assets.profile_icon} alt="" />
             <ul className="nav-profile-dropdown">
               <li onClick={() => navigate("/myorders")}>
-                <img src={assets.bag_icon} />
+                <img src={assets.bag_icon} alt="" />
                 <p>Orders</p>
               </li>
               <hr />
               <li onClick={logOut}>
-                <img src={assets.logout_icon} />
+                <img src={assets.logout_icon} alt="" />
                 <p>LogOut</p>
               </li>
             </ul>

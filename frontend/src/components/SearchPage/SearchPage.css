@@ -1,20 +1,13 @@
-.navbar-search {
-    position: relative;
-  }
-  
-  .search-input {
-    position: absolute;
-    top: 0;
-    left: 30px;
-    padding: 5px 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    outline: none;
-    width: 150px;
-    transition: width 0.3s ease;
-  }
-  
-  .search-icon {
-    cursor: pointer;
-  }
-  
+.search-results {
+  padding: 30px 8%;
+}
+
+.search-results h2 {
+  margin-bottom: 20px;
+}
+
+.food-display-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 30px;
+}

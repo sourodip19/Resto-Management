@@ -57,15 +57,7 @@ app.use("/api/food", foodRouter);
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
-app.get("/api/food/search", async (req, res) => {
-    const q = req.query.q;
-  
-    const results = await foodModel.find({
-      name: { $regex: q, $options: "i" }
-    });
-  
-    res.json(results);
-  });
+
   
 // ----------------------
 // HTTP + Socket.IO

@@ -20,5 +20,16 @@ foodRouter.get("/list", listFood);
 foodRouter.delete("/remove/:id", removeFood);
 foodRouter.put("/toggle/:id", toggleFoodAvailability);
 foodRouter.put("/update/:id", upload.single("image"), updateFood);
+foodRouter.get("/search", async (req, res) => {
+  const q = req.query.q;
+
+  if (!q) return res.json([]);
+
+  const results = await foodModel.find({
+    name: { $regex: q, $options: "i" }
+  });
+
+  res.json(results);
+});
 
 export default foodRouter;
