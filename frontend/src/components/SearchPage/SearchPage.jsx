@@ -18,15 +18,28 @@ const SearchPage = () => {
     if (!query) return;
   
     const fetchResults = async () => {
-      const res = await fetch(
-        `${BACKEND_URL}/api/food/search?q=${query}`
-      );
-      const data = await res.json();
-      setResults(data);
+      try {
+        const res = await fetch(
+          `${BACKEND_URL}/api/food/search?q=${query}`
+        );
+  
+        if (!res.ok) {
+          console.error("Search failed with status:", res.status);
+          setResults([]);
+          return;
+        }
+  
+        const data = await res.json();
+        setResults(data);
+      } catch (error) {
+        console.error("Fetch error:", error);
+        setResults([]);
+      }
     };
   
     fetchResults();
   }, [query]);
+  
   
   return (
     <div className="search-results">

@@ -21,15 +21,22 @@ foodRouter.delete("/remove/:id", removeFood);
 foodRouter.put("/toggle/:id", toggleFoodAvailability);
 foodRouter.put("/update/:id", upload.single("image"), updateFood);
 foodRouter.get("/search", async (req, res) => {
-  const q = req.query.q;
+  try {
+    const q = req.query.q;
 
-  if (!q) return res.json([]);
+    if (!q) {
+      return res.json([]); // 👈 VERY IMPORTANT
+    }
 
-  const results = await foodModel.find({
-    name: { $regex: q, $options: "i" }
-  });
+    const results = await foodModel.find({
+      name: { $regex: q, $options: "i" },
+    });
 
-  res.json(results);
+    res.json(results);
+  } catch (error) {
+    console.error("Search error:", error);
+    res.status(500).json({ error: "Search failed" });
+  }
 });
 
 export default foodRouter;
