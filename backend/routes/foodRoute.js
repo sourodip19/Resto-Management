@@ -7,6 +7,7 @@ import {
   toggleFoodAvailability,
   updateFood,
 } from "../controllers/foodController.js";
+import foodModel from "../models/FoodModel.js";
 
 const foodRouter = express.Router();
 
