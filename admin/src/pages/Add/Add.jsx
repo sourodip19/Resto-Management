@@ -88,8 +88,8 @@ const Add = ({ url }) => {
               <option value="Soups">Soups</option>
               <option value="Rice">Rice</option>
               <option value="Breads">Breads</option>
-              <option value="Veg Main course">Veg Main course</option>
-              <option value="Non Veg Main course">Non veg Main course</option>
+              <option value="Veg Main Course">Veg Main Course</option>
+              <option value="Non-Veg Main Course">Non-Veg Main Course</option>
               <option value="Beverages">Beverages</option>
               <option value="Desserts">Desserts</option>
               <option value="Extras">Extras</option>

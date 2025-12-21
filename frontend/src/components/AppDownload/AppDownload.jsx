@@ -5,7 +5,7 @@ const AppDownload = () => {
   return (
     <div className="app-download" id="app-download">
       <p>
-        For Better Exprience Download <br /> Tomato App
+        For Better Exprience Download <br /> FOODHUB App
       </p>
       <div className="app-download-platforms">
         <img src={assets.play_store} />
