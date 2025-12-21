@@ -8,13 +8,13 @@ const MyOrders = () => {
   const [data, setData] = useState([]);
 
   const fetchOrders = async () => {
-    const res = await axios.post(
-      url + "/api/order/useorders",
-      {},
-      { headers: { token } }
-    );
+    const res = await axios.get(url + "/api/order/useorders", {
+      headers: { token },
+    });
+    
     setData(res.data.data);
   };
+  
   useEffect(() => {
     if (token) {
       fetchOrders();

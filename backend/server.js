@@ -13,6 +13,7 @@ import foodModel from "./models/FoodModel.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
+console.log("KEY_ID FROM ENV:", process.env.RAZORPAY_KEY_ID);
 
 // ----------------------
 // Allowed origins

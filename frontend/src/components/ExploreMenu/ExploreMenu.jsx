@@ -6,9 +6,7 @@ const ExploreMenu = ({ category, setCategory }) => {
     <div className="explore-menu" id="explore-menu">
       <h1>Explore our menu</h1>
       <p className="explore-menu-text">
-  Discover a carefully curated menu crafted with the finest ingredients, bold flavors,
-  and culinary expertise. From comforting classics to signature delights, every dish
-  is designed to satisfy your cravings and turn every meal into a memorable experience.
+      Experience a delicious fusion of flavors from around the world, served with warmth, freshness, and heart. Whether you crave spicy, savory, or sweet — Food Hub is your ultimate destination for good food and great vibes
 </p>
 
       <div className="explore-menu-list">

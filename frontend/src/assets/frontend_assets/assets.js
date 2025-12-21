@@ -10,6 +10,12 @@ import menu_5 from './menu_5.png'
 import menu_6 from './menu_6.png'
 import menu_7 from './menu_7.png'
 import menu_8 from './menu_8.png'
+import menu_9 from './menu_9.png'
+import menu_10 from './menu_10.png'
+import menu_11 from './menu_11.png'
+import menu_12 from './menu_12.png'
+import menu_13 from './menu_13.png'
+import menu_14 from './menu_14.png'
 
 import food_1 from './food_1.png'
 import food_2 from './food_2.png'
@@ -59,7 +65,7 @@ import profile_icon from './profile_icon.png'
 import bag_icon from './bag_icon.png'
 import logout_icon from './logout_icon.png'
 import parcel_icon from './parcel_icon.png'
-
+import insta_icon from "./insta_icon.jpg"
 export const assets = {
     logo,
     basket_icon,
@@ -79,7 +85,8 @@ export const assets = {
     profile_icon,
     logout_icon,
     bag_icon,
-    parcel_icon
+    parcel_icon,
+    insta_icon
 }
 
 export const menu_list = [
@@ -89,55 +96,55 @@ export const menu_list = [
     },
     {
         menu_name: "Sandwiches",
-        menu_image: menu_8
-    },
-    {
-        menu_name: "Pizza",
-        menu_image: menu_4
-    },
-    {
-        menu_name: "Pasta",
-        menu_image: menu_5
-    },
-    {
-        menu_name: "Burger",
-        menu_image: menu_6
-    },
-    {
-        menu_name: "Noodles",
-        menu_image: menu_6
-    },
-    {
-        menu_name: "Soups",
-        menu_image: menu_7
-    },
-    {
-        menu_name: "Rice",
-        menu_image: menu_6
-    },
-    {
-        menu_name: "Breads",
-        menu_image: menu_6
-    },
-    {
-        menu_name: "Veg Main Course",
         menu_image: menu_2
     },
     {
-        menu_name: "Non-Veg Main Course",
+        menu_name: "Pizza",
         menu_image: menu_3
     },
     {
-        menu_name: "Beverages",
+        menu_name: "Pasta",
+        menu_image: menu_4
+    },
+    {
+        menu_name: "Burger",
+        menu_image: menu_5
+    },
+    {
+        menu_name: "Noodles",
+        menu_image: menu_8
+    },
+    {
+        menu_name: "Soups",
+        menu_image: menu_6
+    },
+    {
+        menu_name: "Rice",
         menu_image: menu_7
     },
     {
+        menu_name: "Breads",
+        menu_image: menu_9
+    },
+    {
+        menu_name: "Veg Main Course",
+        menu_image: menu_10
+    },
+    {
+        menu_name: "Non-Veg Main Course",
+        menu_image: menu_11
+    },
+    {
+        menu_name: "Beverages",
+        menu_image: menu_12
+    },
+    {
         menu_name: "Desserts",
-        menu_image: menu_8
+        menu_image: menu_13
     },
     {
         menu_name: "Extras",
-        menu_image: menu_8
+        menu_image: menu_14
     }
 ]
 
