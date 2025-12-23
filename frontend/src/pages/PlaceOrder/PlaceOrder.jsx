@@ -98,6 +98,12 @@ const PlaceOrder = () => {
           color: "#000000",
         },
       };
+// 🔍 DEBUG Razorpay options
+console.log("OPTIONS CHECK 👉", {
+  key: options.key,
+  amount: options.amount,
+  order_id: options.order_id,
+});
 
       // 🚀 Open Razorpay modal
       const razorpay = new window.Razorpay(options);

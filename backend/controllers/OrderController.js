@@ -10,13 +10,7 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-const frontend_url = "http://localhost:5174";
-  // process.env.NODE_ENV === "production"
-  //   ? process.env.FRONTEND_URL
-  //   : "http://localhost:5174";
-  //   console.log("NODE_ENV:", process.env.NODE_ENV);
-  //   console.log("Frontend URL chosen:", frontend_url);
-    
+const frontend_url = process.env.FRONTEND_URL;
 
 /* =========================
    1️⃣ PLACE ORDER (INIT)
@@ -85,10 +79,52 @@ const verifyOrder = async (req, res) => {
     await order.save();
 
     await userModel.findByIdAndUpdate(order.userId, { cartData: {} });
+    const userMessage = `
+🍽️ *Order Confirmed – FoodHub*
+
+Hi ${order.address.firstName},
+
+Thank you for your order! 🎉  
+Your order has been placed successfully and is now being prepared.
+
+🧾 *Order ID:* ${order._id}
+💰 *Amount Paid:* ₹${order.amount}
+📦 *Order Status:* ${order.status}
+
+⏱️ *Estimated Delivery Time:* 30–45 minutes
+
+📍 *Delivery Address:*
+${order.address.street}, ${order.address.city}, ${order.address.state} - ${order.address.zipcode}
+
+📞 *Need help?*
+Call us at: +91 9434132014
+
+Thank you for choosing *FoodHub* ❤️  
+We hope you enjoy your meal 😋
+`;
+const adminMessage = `
+🛎️ *New Order Received – FoodHub*
+
+📦 *Order ID:* ${order._id}
+👤 *Customer Name:* ${order.address.firstName} ${order.address.lastName}
+📞 *Customer Phone:* ${order.address.phone}
+
+💰 *Payment Status:* ${order.payment ? "PAID ✅" : "NOT PAID ❌"}
+💵 *Amount:* ₹${order.amount}
+
+📍 *Delivery Address:*
+${order.address.street},
+${order.address.city}, ${order.address.state} - ${order.address.zipcode}
+
+🕒 *Order Status:* ${order.status}
+
+Please prepare the order accordingly 🍳
+`;
 
     // WhatsApp messages (UNCHANGED)
-    await sendWhatsAppMessage(order.address.phone, `✅ Order Confirmed!`);
-    await sendWhatsAppMessage(process.env.ADMIN_WHATSAPP, `🛒 New Order`);
+    await sendWhatsAppMessage(order.address.phone, userMessage);
+    await sendWhatsAppMessage(process.env.ADMIN_WHATSAPP, adminMessage);
+
 
     io.emit("newOrder", order);
 
