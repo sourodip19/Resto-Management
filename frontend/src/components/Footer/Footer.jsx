@@ -47,7 +47,12 @@ const Footer = () => {
           <h2>Get In Touch</h2>
           <ul>
             <li>+91 9093810998</li>
-            <li>contact@foodhubindia.com</li>
+            <li>
+  <a href="mailto:Rajibdey2016indian@gmail.com">
+    Rajibdey2016indian@gmail.com
+  </a>
+</li>
+
             <li>
             <a href="https://share.google/gzA2nI6rz9D0XxWxk" target="_blank">
   Anatheswar Rd, near Forest Office, Krishnanagar, West Bengal 741101 —

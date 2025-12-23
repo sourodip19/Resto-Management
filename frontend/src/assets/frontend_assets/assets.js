@@ -56,7 +56,7 @@ import remove_icon_red from './remove_icon_red.png'
 import app_store from './app_store.png'
 import play_store from './play_store.png'
 import linkedin_icon from './linkedin_icon.png'
-import facebook_icon from './facebook_icon.png'
+import facebook_icon from './facebook_icon.webp'
 import twitter_icon from './twitter_icon.png'
 import cross_icon from './cross_icon.png'
 import selector_icon from './selector_icon.png'
@@ -65,7 +65,7 @@ import profile_icon from './profile_icon.png'
 import bag_icon from './bag_icon.png'
 import logout_icon from './logout_icon.png'
 import parcel_icon from './parcel_icon.png'
-import insta_icon from "./insta_icon.jpg"
+import insta_icon from "./Instagram_logo.png"
 export const assets = {
     logo,
     basket_icon,
