@@ -1,0 +1,84 @@
+/* Page background */
+.admin-login {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ff512f, #f09819);
+    font-family: "Inter", sans-serif;
+    position: relative;
+  }
+  
+  /* Logo top-left */
+  .admin-logo {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .admin-logo img {
+    width: 42px;
+    height: auto;
+  }
+  
+  .admin-logo span {
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+  }
+  
+  /* Login card */
+  .admin-login-form {
+    background: #ffffff;
+    padding: 32px 28px;
+    border-radius: 10px;
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Heading */
+  .admin-login-form h2 {
+    text-align: center;
+    color: #ff512f;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  
+  /* Inputs */
+  .admin-login-form input {
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    outline: none;
+  }
+  
+  .admin-login-form input:focus {
+    border-color: #ff512f;
+    box-shadow: 0 0 0 2px rgba(255, 81, 47, 0.15);
+  }
+  
+  /* Button */
+  .admin-login-form button {
+    padding: 12px;
+    background: linear-gradient(135deg, #ff512f, #f09819);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .admin-login-form button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(255, 81, 47, 0.4);
+  }
+  

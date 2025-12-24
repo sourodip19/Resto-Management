@@ -88,6 +88,9 @@ Thank you for your order! 🎉
 Your order has been placed successfully and is now being prepared.
 
 🧾 *Order ID:* ${order._id}
+  🍔 *Items:* ${order.items
+  .map(item => `${item.name} x ${item.quantity}`)
+  .join(", ")}
 💰 *Amount Paid:* ₹${order.amount}
 📦 *Order Status:* ${order.status}
 
@@ -106,6 +109,9 @@ const adminMessage = `
 🛎️ *New Order Received – FoodHub*
 
 📦 *Order ID:* ${order._id}
+  🍔 *Items:* ${order.items
+  .map(item => `${item.name} x ${item.quantity}`)
+  .join(", ")}
 👤 *Customer Name:* ${order.address.firstName} ${order.address.lastName}
 📞 *Customer Phone:* ${order.address.phone}
 

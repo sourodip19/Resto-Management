@@ -60,7 +60,7 @@ const Navbar = ({ setShowLogin }) => {
         <li onClick={() => {setMenu("Mobile-App"), scrollToSection("app-download");}} className={menu === "Mobile-App" ? "active" : ""}>
           Mobile-App
         </li>
-        <li onClick={() => {setMenu("Contact Us"), scrollToSection("footer");}} className={menu === "Contact Us" ? "active" : ""}>
+        <li onClick={() => {setMenu("Contact Us"), scrollToSection("app-download");}} className={menu === "Contact Us" ? "active" : ""}>
           Contact Us
         </li>
       </ul>
