@@ -14,7 +14,7 @@ To quickly grasp the architecture, here's a mind map illustrating the core parts
 ```mermaid
 ---
 config:
-  theme: mc
+  theme: neutral
 ---
 mindmap
   root((Resto-Management))
