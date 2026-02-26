@@ -6,6 +6,40 @@ A full-stack restaurant management system built with the **MERN** stack (Node.js
 - **frontend/** – Customer-facing React app for browsing food & placing orders
 - **admin/** – Admin dashboard React app for managing menu & orders
 
+
+## 🧩 Visual Overview
+
+To help non-English speakers and managers quickly grasp the architecture, here's a mind map illustrating the core parts of the system:
+
+```mermaid
+mindmap
+  root((Resto-Management))
+    Admin Panel
+      Secure Login
+      Manage Foods
+      View Orders
+      Real‑time via WebSockets
+    Customer Frontend
+      Browse/Search Menu
+      Cart & Place Orders
+      Live Order Status
+      Authentication & History
+    Backend API
+      Node.js/Express
+      MongoDB/Mongoose
+      JWT Auth
+      Cloudinary Images
+      WhatsApp Notifications
+    Tech Stack
+      Frontend: React (Vite), CSS, socket.io
+      Backend: Node, Express, MongoDB
+      Dev Tools: ESLint, Vercel
+    Repository Structure
+      admin/
+      frontend/
+      backend/
+```
+
 ---
 
 ## 🚀 Features
@@ -84,30 +118,6 @@ Each sub-project is self-contained with its own `package.json` and can be starte
 
 ---
 
-## 🧩 Mind Map
-
-```
-Resto-Management
-├─ Backend
-│  ├─ Auth (JWT)
-│  ├─ Models: User, Food, Order
-│  ├─ Controllers
-│  │  ├─ User (register/login)
-│  │  ├─ Food (CRUD, search)
-│  │  ├─ Cart (add/remove/get)
-│  │  └─ Order (place, verify, status, list)
-│  ├─ Utils: WhatsApp client
-│  └─ Socket.IO (newOrder, orderStatusUpdate)
-├─ Frontend (Customer)
-│  ├─ Pages: Home, Cart, PlaceOrder, Verify, MyOrders
-│  ├─ Components: Header, Footer, FoodItem, Search, etc.
-│  ├─ Context: StoreContext for global state
-│  └─ Socket: listen for order updates
-└─ Admin
-   ├─ Pages: Login, List, Add, Edit, Order
-   ├─ Components: Navbar, Sidebar, ProtectedRoute
-   └─ Socket: receive new order events
-```
 
 ---
 
