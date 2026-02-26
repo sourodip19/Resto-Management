@@ -9,7 +9,7 @@ A full-stack restaurant management system built with the **MERN** stack (Node.js
 
 ## 🧩 Visual Overview
 
-To help non-English speakers and managers quickly grasp the architecture, here's a mind map illustrating the core parts of the system:
+To quickly grasp the architecture, here's a mind map illustrating the core parts of the system:
 
 ```mermaid
 mindmap
@@ -18,7 +18,7 @@ mindmap
       Secure Login
       Manage Foods
       View Orders
-      Real‑time via WebSockets
+      Real-time via WebSockets
     Customer Frontend
       Browse/Search Menu
       Cart & Place Orders
@@ -31,13 +31,13 @@ mindmap
       Cloudinary Images
       WhatsApp Notifications
     Tech Stack
-      Frontend: React (Vite), CSS, socket.io
-      Backend: Node, Express, MongoDB
-      Dev Tools: ESLint, Vercel
+      Frontend: React Vite CSS socket.io
+      Backend: Node Express MongoDB
+      Dev Tools: ESLint Vercel
     Repository Structure
-      admin/
-      frontend/
-      backend/
+      admin
+      frontend
+      backend
 ```
 
 ---
