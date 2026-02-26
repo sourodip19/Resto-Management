@@ -12,6 +12,10 @@ A full-stack restaurant management system built with the **MERN** stack (Node.js
 To quickly grasp the architecture, here's a mind map illustrating the core parts of the system:
 
 ```mermaid
+---
+config:
+  theme: mc
+---
 mindmap
   root((Resto-Management))
     Admin Panel
