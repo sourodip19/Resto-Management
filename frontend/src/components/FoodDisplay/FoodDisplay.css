@@ -6,10 +6,40 @@
   font-size: max(2vw, 24px);
   font-weight: 600;
 }
+
 .food-display-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   margin-top: 30px;
-  gap:30px;
-  row-gap:50px;
+  gap: 30px;
+  row-gap: 50px;
+}
+
+.view-more-btn {
+  display: block;
+  margin: 30px auto;
+  padding: 12px 35px;
+  background-color: tomato;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.view-more-btn:hover:not(:disabled) {
+  background-color: #e03e00;
+}
+
+.view-more-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.no-items-text {
+  text-align: center;
+  color: #999;
+  margin-top: 20px;
+  font-size: 15px;
 }
