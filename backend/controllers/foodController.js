@@ -53,9 +53,12 @@ const listFood = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 4;
     const skip = (page - 1) * limit;
+    const category = req.query.category; // 👈 read category
 
-    const totalItems = await foodModel.countDocuments();
-    const foods = await foodModel.find({}).skip(skip).limit(limit);
+    const filter = category && category !== "All" ? { category } : {}; // 👈 build filter
+
+    const totalItems = await foodModel.countDocuments(filter);
+    const foods = await foodModel.find(filter).skip(skip).limit(limit);
 
     res.json({
       success: true,

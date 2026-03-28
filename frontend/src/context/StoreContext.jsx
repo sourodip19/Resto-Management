@@ -11,14 +11,17 @@ const StoreContextProvider = (props) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState("All");
   const url = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
   // Initial load - only called once on mount
-const fetchFoodList = async () => {
-  const res = await axios.get(`${url}/api/food/list?page=1&limit=4`);
+const fetchFoodList = async (category = "All") => {
+  const cat = category !== "All" ? `&category=${category}` : "";
+  const res = await axios.get(`${url}/api/food/list?page=1&limit=4${cat}`);
   setFoodlist(res.data.data);
   setHasMore(res.data.hasMore);
   setPage(1);
+  setCurrentCategory(category); // 👈 remember current category
 };
 
 // Called when user clicks "View More"
@@ -26,8 +29,9 @@ const fetchMoreFood = async () => {
   if (!hasMore || loadingMore) return;
   setLoadingMore(true);
   const nextPage = page + 1;
-  const res = await axios.get(`${url}/api/food/list?page=${nextPage}&limit=4`);
-  setFoodlist((prev) => [...prev, ...res.data.data]); // 👈 append, don't replace
+  const cat = currentCategory !== "All" ? `&category=${currentCategory}` : "";
+  const res = await axios.get(`${url}/api/food/list?page=${nextPage}&limit=4${cat}`);
+  setFoodlist((prev) => [...prev, ...res.data.data]);
   setHasMore(res.data.hasMore);
   setPage(nextPage);
   setLoadingMore(false);
@@ -123,9 +127,11 @@ const fetchMoreFood = async () => {
     setToken,
     loading, // 👈 added
     getTotalCartItems,
-     hasMore,
+    hasMore,
     fetchMoreFood,
     loadingMore,
+    fetchFoodList,      // 👈 add this
+    currentCategory,    // 👈 add this
   };
 
   return (

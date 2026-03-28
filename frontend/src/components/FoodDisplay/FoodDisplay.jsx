@@ -1,21 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import "./FoodDisplay.css";
 import { StoreContext } from "../../context/StoreContext";
 import FoodItem from "../FoodItem/FoodItem";
 
 const FoodDisplay = ({ category }) => {
-  const { food_list, hasMore, fetchMoreFood, loadingMore } = useContext(StoreContext);
+  const { food_list, hasMore, fetchMoreFood, loadingMore, fetchFoodList } =
+    useContext(StoreContext);
 
-  const filteredList = food_list.filter(
-    (item) => category === "All" || category === item.category
-  );
+  // 👈 whenever category changes, refetch from backend
+  useEffect(() => {
+    fetchFoodList(category);
+  }, [category]);
 
   return (
     <div className="food-display" id="food_display">
       <h2>Top dishes near you</h2>
 
       <div className="food-display-list">
-        {filteredList.map((item) => (
+        {food_list.map((item) => (       // 👈 no more frontend filtering needed
           <FoodItem
             key={item._id}
             id={item._id}
@@ -27,7 +29,6 @@ const FoodDisplay = ({ category }) => {
         ))}
       </div>
 
-      {/* Show "View More" only if there are more items AND current category has matches */}
       {hasMore && (
         <button
           className="view-more-btn"
@@ -38,8 +39,7 @@ const FoodDisplay = ({ category }) => {
         </button>
       )}
 
-      {/* No items found for this category */}
-      {filteredList.length === 0 && !loadingMore && (
+      {food_list.length === 0 && !loadingMore && (
         <p className="no-items-text">No items found in this category.</p>
       )}
     </div>
