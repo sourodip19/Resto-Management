@@ -30,7 +30,7 @@ const fetchMoreFood = async () => {
   setLoadingMore(true);
   const nextPage = page + 1;
   const cat = currentCategory !== "All" ? `&category=${currentCategory}` : "";
-  const res = await axios.get(`${url}/api/food/list?page=${nextPage}&limit=4${cat}`);
+  const res = await axios.get(`${url}/api/food/list?page=${nextPage}&limit=8${cat}`);
   setFoodlist((prev) => [...prev, ...res.data.data]);
   setHasMore(res.data.hasMore);
   setPage(nextPage);
